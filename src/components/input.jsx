@@ -1,4 +1,9 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleXmark,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Input = ({
   id,
@@ -11,6 +16,8 @@ const Input = ({
   onFocus,
   onBlur,
   placeholder,
+  value,
+  valid,
 }) => {
   return (
     <div className="relative w-full sm:w-5/6 mx-auto">
@@ -32,7 +39,19 @@ const Input = ({
         htmlFor={id}
         className="font-commisioner font-medium text-sm absolute left-0 -top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:left-2 peer-placeholder-shown:top-2 transition-all duration-300 peer-focus:text-sm peer-focus:-top-3.5 peer-focus:left-0"
       >
-        {children}
+        {children}{" "}
+        <span
+          className={
+            valid && value ? "ml-2 text-green-600 text-base" : "hidden"
+          }
+        >
+          <FontAwesomeIcon icon={faCircleCheck} />
+        </span>
+        <span
+          className={valid || !value ? "hidden" : "ml-2 text-red-500 text-base"}
+        >
+          <FontAwesomeIcon icon={faCircleXmark} />
+        </span>
       </label>
     </div>
   );

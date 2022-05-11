@@ -2,21 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-z0-9-_]{3,24}$/;
 const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX =
+    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const initialState = {
     username: "",
     validUser: false,
     userFocus: false,
     email: "",
-    emailFocus: false,
+    validEmail: false,
     pwd: "",
     validPwd: false,
+    validPwdLogin: false,
     pwdFocus: false,
     matchPwd: "",
     validMatch: false,
     matchFocus: false,
     errMsg: "",
-    success: false,
 };
 
 export const registerSlice = createSlice({
@@ -50,6 +52,15 @@ export const registerSlice = createSlice({
                 email: action.payload,
             };
         },
+        validateEmail: (state, action) => {
+            const res = EMAIL_REGEX.test(action.payload);
+            console.log(res);
+            console.log(state.validEmail);
+            return {
+                ...state,
+                validEmail: res,
+            };
+        },
         setEmailFocus: (state, action) => {
             return {
                 ...state,
@@ -70,6 +81,15 @@ export const registerSlice = createSlice({
                 ...state,
                 validPwd: res,
             };
+        },
+        validatePassLogin: (state, action) => {
+            if (typeof action.payload !== Boolean) {
+                return {
+                    ...state,
+                    pwd: action.payload.toString(),
+                    validPwdLogin: true,
+                };
+            }
         },
         setPassFocus: (state, action) => {
             return {
@@ -102,6 +122,24 @@ export const registerSlice = createSlice({
                 errMsg: action.payload,
             };
         },
+        reset: (state) => {
+            return {
+                ...state,
+                username: "",
+                validUser: false,
+                userFocus: false,
+                email: "",
+                validEmail: false,
+                pwd: "",
+                validPwd: false,
+                validPwdLogin: false,
+                pwdFocus: false,
+                matchPwd: "",
+                validMatch: false,
+                matchFocus: false,
+                errMsg: "",
+            };
+        },
     },
 });
 
@@ -116,8 +154,11 @@ export const {
     setPassFocus,
     setErrMsg,
     validateUser,
+    validateEmail,
     validatePass,
+    validatePassLogin,
     validateMatch,
+    reset,
 } = registerSlice.actions;
 
 export default registerSlice.reducer;
