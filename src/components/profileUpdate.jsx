@@ -9,8 +9,8 @@ import {
   setImage,
   setPass,
   setProfilDetail,
+  setProfileUpdated,
   setUpdateProfile,
-  setUser,
 } from "../app/features/pages/active";
 import axios from "../api/axios";
 
@@ -26,28 +26,26 @@ const ProfileUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = `Token ${authUser.token}`;
+    const bodyConfig = {
+      user: {
+        bio,
+        email,
+        image,
+        password,
+      },
+    };
+    const header = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${authUser.token}`,
+      },
+    };
     try {
-      const res = await axios.put(
-        "/user",
-        {
-          user: {
-            bio,
-            email,
-            image,
-            password,
-          },
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: token,
-          },
-        }
-      );
+      const res = await axios.put("/user", bodyConfig, header);
       if (res.status === 200) {
-        dispatch(setProfilDetail(res.data.profile));
+        console.log(res);
+        dispatch(setProfileUpdated());
         dispatch(setUpdateProfile());
         dispatch(resetProfile());
       }
@@ -63,14 +61,6 @@ const ProfileUpdate = () => {
         className="text-white flex flex-col gap-7 mt-12"
         onSubmit={handleSubmit}
       >
-        <Input
-          type="text"
-          id="username"
-          onChange={(e) => dispatch(setUser(e.target.value))}
-          placeholder="username"
-        >
-          Username
-        </Input>
         <Input
           type="text"
           id="email"
@@ -103,9 +93,7 @@ const ProfileUpdate = () => {
         >
           Password
         </Input>
-        <Button
-          disable={!username || !password || !bio || !image ? true : false}
-        >
+        <Button disable={username || password || bio || image ? false : true}>
           Simpan
         </Button>
       </form>

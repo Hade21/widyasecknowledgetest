@@ -20,6 +20,7 @@ const Profile = () => {
   const articles = useSelector((state) => state.active.articles);
   const authUser = useSelector((state) => state.register.setAuth);
   const profileDetail = useSelector((state) => state.active.profileDetail);
+  const profileUpdated = useSelector((state) => state.active.profileUpdated);
 
   useEffect(() => {
     async function GetDetail() {
@@ -40,7 +41,8 @@ const Profile = () => {
       }
     }
     GetDetail();
-  }, [authUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileUpdated]);
 
   const handleFullScreen = () => {
     dispatch(setProfileActive());
@@ -71,7 +73,7 @@ const Profile = () => {
         >
           {profileDetail ? (
             <img
-              src={profileDetail.image ? profileDetail.image : faUserCircle}
+              src={profileDetail.image}
               alt="profile"
               className="w-[200px] h-[200px] rounded-full mb-4"
             />

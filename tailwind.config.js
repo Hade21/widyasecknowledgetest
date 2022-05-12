@@ -9,6 +9,16 @@ module.exports = {
             },
             backgroundImage: {
                 "web-sec": "url('https://pantheon.io/sites/default/files/shutterstock_security_horiz.jpg')",
+                glass: "rgba(17,25,40,0.75)",
+            },
+            backdropBlur: {
+                glass: "16px",
+            },
+            saturate: {
+                glass: "180%",
+            },
+            colors: {
+                "glass-border": "rgba(255, 255, 255, 0.125)",
             },
         },
     },

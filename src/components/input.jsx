@@ -28,7 +28,6 @@ const Input = ({
         ref={reff}
         autoComplete="off"
         onChange={onChange}
-        required
         aria-invalid={invalid}
         aria-describedby={describedby}
         onFocus={onFocus}

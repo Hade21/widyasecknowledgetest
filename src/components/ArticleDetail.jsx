@@ -32,7 +32,7 @@ const ArticleDetail = () => {
   return (
     <div>
       <div className="content flex flex-col gap-14">
-        {content[0] ? (
+        {content ? (
           !article ? (
             <CardArticle
               title={content[0].title}

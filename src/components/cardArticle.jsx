@@ -4,7 +4,13 @@ const CardArticle = ({ article, title, desc, body, author, date, tags }) => {
   const tanggal = date.slice(0, 10);
   const jam = date.slice(11, 19);
   return (
-    <div className="content">
+    <div
+      className={
+        article
+          ? "content bg-glass backdrop-blur-glass saturate-glass border-glass-border p-4 rounded-lg"
+          : "content"
+      }
+    >
       <h1
         className={`font-merriewether font-bold  ${
           article ? "text-center text-5xl" : "text-left text-7xl"

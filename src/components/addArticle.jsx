@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../api/axios";
 import {
+  resetArticle,
   setAddArticle,
   setBody,
   setDes,
@@ -19,30 +20,39 @@ const AddArticle = () => {
   const body = useSelector((state) => state.active.body);
   const tagList = useSelector((state) => state.active.tagList);
   const userAuth = useSelector((state) => state.register.setAuth);
+  const [tag, setTag] = useState("");
+
+  useEffect(() => {
+    dispatch(setTagList(tag));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tag]);
+
+  const cancel = () => {
+    dispatch(setAddArticle());
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const bodyConfig = {
+      article: {
+        title,
+        description,
+        body,
+        tagList,
+      },
+    };
+    const header = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${userAuth.token}`,
+      },
+    };
     try {
-      const res = await axios.post(
-        "/articles",
-        {
-          article: {
-            title,
-            description,
-            body,
-            tagList,
-          },
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${userAuth.token}`,
-          },
-        }
-      );
+      const res = await axios.post("/articles", bodyConfig, header);
       if (res.status === 201) {
         console.log(res);
+        dispatch(resetArticle());
         dispatch(setAddArticle());
       }
       console.log(res);
@@ -57,9 +67,6 @@ const AddArticle = () => {
     }
   };
 
-  const cancel = () => {
-    dispatch(setAddArticle());
-  };
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-7 text-white">
@@ -103,8 +110,8 @@ const AddArticle = () => {
           type="text"
           placeholder="Tag"
           id="tagList"
-          onChange={(e) => setTagList(e.target.value)}
-          value={tagList}
+          onChange={(e) => setTag(e.target.value)}
+          value={tag}
           validation={false}
         >
           Tag

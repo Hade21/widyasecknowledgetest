@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import validator from "validator";
 
 const initialState = {
     profile: false,
@@ -10,12 +11,13 @@ const initialState = {
     bio: "",
     email: "",
     image: "",
+    validImage: false,
     password: "",
     title: "",
     description: "",
     body: "",
     tagList: [],
-    article: [],
+    profileUpdated: false,
 };
 
 export const activeSlices = createSlice({
@@ -31,7 +33,7 @@ export const activeSlices = createSlice({
         setTagList: (state, action) => {
             return {
                 ...state,
-                tagList: [...state.tagList, action.payload],
+                tagList: [action.payload],
             };
         },
         setBody: (state, action) => {
@@ -95,11 +97,19 @@ export const activeSlices = createSlice({
             };
         },
         setImage: (state, action) => {
-            return {
-                ...state,
-                image: action.payload,
-            };
+            if (validator.isURL(action.payload)) {
+                return {
+                    ...state,
+                    image: action.payload,
+                };
+            } else {
+                return {
+                    ...state,
+                    image: null,
+                };
+            }
         },
+        setvalidImage: (state, action) => {},
         setPass: (state, action) => {
             return {
                 ...state,
@@ -122,6 +132,21 @@ export const activeSlices = createSlice({
                 password: "",
             };
         },
+        resetArticle: (state) => {
+            return {
+                ...state,
+                title: "",
+                description: "",
+                body: "",
+                tagList: [],
+            };
+        },
+        setProfileUpdated: (state) => {
+            return {
+                ...state,
+                profileUpdated: !state.profileUpdated,
+            };
+        },
     },
 });
 
@@ -141,7 +166,9 @@ export const {
     setBody,
     setTagList,
     setArticle,
+    setProfileUpdated,
     resetProfile,
+    resetArticle,
 } = activeSlices.actions;
 
 export default activeSlices.reducer;
