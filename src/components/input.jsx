@@ -18,6 +18,7 @@ const Input = ({
   placeholder,
   value,
   valid,
+  validation,
 }) => {
   return (
     <div className="relative w-full sm:w-5/6 mx-auto">
@@ -34,6 +35,7 @@ const Input = ({
         onBlur={onBlur}
         className="bg-transparent outline-none focus:outline-none p-2 border-b-2 border-gray-300  focus:border-rose-600 peer w-full font-commisioner placeholder-transparent"
         placeholder={placeholder}
+        value={value}
       />
       <label
         htmlFor={id}
@@ -48,7 +50,11 @@ const Input = ({
           <FontAwesomeIcon icon={faCircleCheck} />
         </span>
         <span
-          className={valid || !value ? "hidden" : "ml-2 text-red-500 text-base"}
+          className={
+            valid || !value || !validation
+              ? "hidden"
+              : "ml-2 text-red-500 text-base"
+          }
         >
           <FontAwesomeIcon icon={faCircleXmark} />
         </span>

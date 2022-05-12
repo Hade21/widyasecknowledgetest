@@ -1,8 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import Body from "../../components/body";
 import Header from "../../components/header";
 
 const Home = () => {
+  const authUser = useSelector((state) => state.register.setAuth);
   return (
     <section className="relative">
       <Header />
@@ -22,7 +24,7 @@ const Home = () => {
             </span>
           </span>
         </span>
-        <Body />
+        {authUser ? <Body /> : null}
       </div>
     </section>
   );

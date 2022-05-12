@@ -2,23 +2,32 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     profile: false,
+    profileDetail: null,
     updateProfile: false,
     articles: false,
     addArticle: false,
     username: "",
     bio: "",
+    email: "",
     image: "",
     password: "",
     title: "",
     description: "",
     body: "",
     tagList: [],
+    article: [],
 };
 
 export const activeSlices = createSlice({
     name: "active",
     initialState,
     reducers: {
+        setProfilDetail: (state, action) => {
+            return {
+                ...state,
+                profileDetail: action.payload,
+            };
+        },
         setTagList: (state, action) => {
             return {
                 ...state,
@@ -73,6 +82,12 @@ export const activeSlices = createSlice({
                 username: action.payload,
             };
         },
+        setEmail: (state, action) => {
+            return {
+                ...state,
+                email: action.payload,
+            };
+        },
         setBio: (state, action) => {
             return {
                 ...state,
@@ -91,15 +106,33 @@ export const activeSlices = createSlice({
                 password: action.payload,
             };
         },
+        setArticle: (state, action) => {
+            return {
+                ...state,
+                article: action.payload,
+            };
+        },
+        resetProfile: (state) => {
+            return {
+                ...state,
+                username: "",
+                bio: "",
+                email: "",
+                image: "",
+                password: "",
+            };
+        },
     },
 });
 
 export const {
     setArticlesActive,
+    setProfilDetail,
     setAddArticle,
     setProfileActive,
     setUpdateProfile,
     setUser,
+    setEmail,
     setBio,
     setImage,
     setPass,
@@ -107,6 +140,8 @@ export const {
     setDes,
     setBody,
     setTagList,
+    setArticle,
+    resetProfile,
 } = activeSlices.actions;
 
 export default activeSlices.reducer;

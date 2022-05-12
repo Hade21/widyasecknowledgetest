@@ -19,6 +19,7 @@ const initialState = {
     validMatch: false,
     matchFocus: false,
     errMsg: "",
+    setAuth: null,
 };
 
 export const registerSlice = createSlice({
@@ -140,6 +141,12 @@ export const registerSlice = createSlice({
                 errMsg: "",
             };
         },
+        setAuth: (state, action) => {
+            return {
+                ...state,
+                setAuth: action.payload,
+            };
+        },
     },
 });
 
@@ -159,6 +166,7 @@ export const {
     validatePassLogin,
     validateMatch,
     reset,
+    setAuth,
 } = registerSlice.actions;
 
 export default registerSlice.reducer;

@@ -29,7 +29,9 @@ const Articles = () => {
     >
       {addArticle ? <AddArticle /> : <ArticleDetail />}
       <p
-        className="cursor-pointer text-white font-commisioner font-medium flex gap-4 items-center justify-center mt-32"
+        className={`cursor-pointer text-white font-commisioner font-medium flex gap-4 items-center justify-center ${
+          article ? "mt-8" : "mt-32"
+        }`}
         onClick={handleFullScreen}
       >
         {article ? "Hide Articles" : "See Articles"}

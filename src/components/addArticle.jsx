@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "../api/axios";
 import {
   setAddArticle,
   setBody,
@@ -17,18 +18,58 @@ const AddArticle = () => {
   const description = useSelector((state) => state.active.description);
   const body = useSelector((state) => state.active.body);
   const tagList = useSelector((state) => state.active.tagList);
+  const userAuth = useSelector((state) => state.register.setAuth);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "/articles",
+        {
+          article: {
+            title,
+            description,
+            body,
+            tagList,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Token ${userAuth.token}`,
+          },
+        }
+      );
+      if (res.status === 201) {
+        console.log(res);
+        dispatch(setAddArticle());
+      }
+      console.log(res);
+    } catch (err) {
+      if (!err?.response) {
+        alert("No Server Response");
+      } else if (err.response?.status === 422) {
+        alert("Gagal Menambahkan! Artikel pernah dimuat!");
+      } else {
+        alert("gagal Menambahkan!");
+      }
+    }
+  };
+
+  const cancel = () => {
     dispatch(setAddArticle());
   };
   return (
     <div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-7">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-7 text-white">
         <Input
           type="text"
           placeholder="Judul"
           id="title"
           onChange={(e) => dispatch(setTitle(e.target.value))}
+          value={title}
+          validation={false}
         >
           Judul
         </Input>
@@ -37,6 +78,8 @@ const AddArticle = () => {
           placeholder="Deskripsi"
           id="description"
           onChange={(e) => dispatch(setDes(e.target.value))}
+          value={description}
+          validation={false}
         >
           Deskripsi
         </Input>
@@ -47,6 +90,7 @@ const AddArticle = () => {
             id="body"
             placeholder="Isi Artikel"
             onChange={(e) => dispatch(setBody(e.target.value))}
+            value={body}
           ></textarea>
           <label
             htmlFor="body"
@@ -59,15 +103,26 @@ const AddArticle = () => {
           type="text"
           placeholder="Tag"
           id="tagList"
-          onChange={(e) => dispatch(setTagList(e.target.value))}
+          onChange={(e) => setTagList(e.target.value)}
+          value={tagList}
+          validation={false}
         >
           Tag
         </Input>
-        <Button
-          disable={!title || !description || !body || !tagList ? true : false}
-        >
-          Tambah
-        </Button>
+        <div className="action flex justify-center mt-8">
+          <Button
+            disable={!title || !description || !body || !tagList ? true : false}
+          >
+            Tambah
+          </Button>
+          <button
+            type="button"
+            className="px-14 py-3 bg-blue-400 rounded-lg w-fit font-commisioner font-bold mx-auto cursor-pointer"
+            onClick={cancel}
+          >
+            Batal
+          </button>
+        </div>
       </form>
     </div>
   );

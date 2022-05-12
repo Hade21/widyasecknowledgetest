@@ -12,6 +12,7 @@ import {
   validatePassLogin,
   validateEmail,
   reset,
+  setAuth,
 } from "../../app/features/register/register";
 import Button from "../../components/button";
 import Input from "../../components/input";
@@ -24,7 +25,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const email = useSelector((state) => state.register.email);
+  const useremail = useSelector((state) => state.register.email);
   const validEmail = useSelector((state) => state.register.validEmail);
   const password = useSelector((state) => state.register.pwd);
   const validPassLogin = useSelector((state) => state.register.validPwdLogin);
@@ -35,9 +36,9 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(validateEmail(email));
+    dispatch(validateEmail(useremail));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [email]);
+  }, [useremail]);
 
   useEffect(() => {
     dispatch(validatePassLogin(password));
@@ -47,11 +48,11 @@ const Login = () => {
   useEffect(() => {
     dispatch(setErrMsg(""));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [email, password]);
+  }, [useremail, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validate1 = dispatch(validateEmail(email));
+    const validate1 = dispatch(validateEmail(useremail));
     const validate2 = dispatch(validatePass(password));
     if (!validate1 || !validate2) {
       dispatch(setErrMsg("Invalid Entry"));
@@ -59,16 +60,19 @@ const Login = () => {
     }
     try {
       const response = await axios.post("/users/login", {
-        user: { email: email, password: password },
+        user: { email: useremail, password: password },
       });
-      console.log(response, response.data);
-      dispatch(reset());
-      navigate("/login");
+      if (response.status === 200) {
+        const { email, username, token } = response.data.user;
+        dispatch(setAuth({ email, username, token }));
+        dispatch(reset());
+        navigate("/");
+      }
     } catch (error) {
       if (!error?.response) {
         dispatch(setErrMsg("No Server response"));
       } else if (error.response?.status === 403) {
-        dispatch(setErrMsg("You have no access!"));
+        dispatch(setErrMsg("Email or Password invalid!"));
       } else {
         dispatch(setErrMsg("Login Failed"));
       }
@@ -104,6 +108,7 @@ const Login = () => {
             onFocus={() => dispatch(setEmailFocus(true))}
             onBlur={() => dispatch(setEmailFocus(false))}
             placeholder="Email"
+            value={useremail}
           >
             Email
           </Input>
@@ -118,6 +123,7 @@ const Login = () => {
               onFocus={() => dispatch(setPassFocus(true))}
               onBlur={() => dispatch(setPassFocus(false))}
               placeholder="Password"
+              value={password}
             >
               Password
             </Input>

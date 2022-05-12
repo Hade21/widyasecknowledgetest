@@ -82,14 +82,20 @@ const Register = () => {
       const response = await axios.post("/users", {
         user: { username: username, email: email, password: password },
       });
-      console.log(response, response.data);
-      dispatch(reset());
-      navigate("/login");
+      if (response.status === 201) {
+        dispatch(reset());
+        navigate("/login");
+      }
     } catch (error) {
       if (!error?.response) {
         dispatch(setErrMsg("No Server response"));
       } else if (error.response?.status === 422) {
-        dispatch(setErrMsg("Attempt to Write a Readonly Database"));
+        if (
+          error.response.data.errors.body ===
+          "UNIQUE constraint failed: users.username"
+        ) {
+          dispatch(setErrMsg("Username Already Taken"));
+        }
       } else {
         dispatch(setErrMsg("Registration Failed"));
       }

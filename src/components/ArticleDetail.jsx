@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAddArticle } from "../app/features/pages/active";
+import axios from "../api/axios";
+import { setAddArticle, setArticle } from "../app/features/pages/active";
 import Button from "./button";
+import CardArticle from "./cardArticle";
 
 const ArticleDetail = () => {
   const dispatch = useDispatch();
   const article = useSelector((state) => state.active.articles);
+  const content = useSelector((state) => state.active.article);
+
+  useEffect(() => {
+    async function GetArticle() {
+      try {
+        const res = await axios.get("/articles");
+        if (res.status === 200) {
+          dispatch(setArticle(res.data.articles));
+        }
+      } catch (error) {
+        dispatch(setArticle({}));
+      }
+    }
+    GetArticle();
+  }, []);
+  console.log(content);
 
   const handleSwitch = () => {
     dispatch(setAddArticle());
@@ -13,43 +31,42 @@ const ArticleDetail = () => {
 
   return (
     <div>
-      <div className="content">
-        <h1
-          className={`font-merriewether font-bold text-8xl ${
-            article ? "text-center" : "text-left"
-          } text-white`}
-        >
-          Title
-        </h1>
-        {!article && (
-          <p className="font-commisioner text-3xl text-left text-slate-300 mt-4">
-            Desc
-          </p>
-        )}
-        {article && (
-          <div className="body">
-            <p
-              className={`font-commisioner text-base text-justify text-slate-300 mt-4 ${
-                article ? "pr-0" : "pr-32"
-              } `}
-            >
-              Body (quia et suscipit\nsuscipit recusandae consequuntur expedita
-              et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum
-              est autem sunt rem eveniet architecto)
-            </p>
-            <div className="footer flex justify-between mt-8">
-              <p className="text-lg font-commisioner font-medium text-left text-rose-400">
-                Author | publish date
-              </p>
-              <p className="text-base font-commisioner font-normal text-left text-orange-300">
-                Tags
-              </p>
-            </div>
-          </div>
+      <div className="content flex flex-col gap-14">
+        {content[0] ? (
+          !article ? (
+            <CardArticle
+              title={content[0].title}
+              desc={content[0].description}
+              body={content[0].body}
+              author={content[0].author.username}
+              date={content[0].updatedAt}
+              tags={content[0].tagList}
+              article={article}
+            />
+          ) : (
+            content.map((item) => {
+              return (
+                <CardArticle
+                  title={item.title}
+                  desc={item.description}
+                  body={item.body}
+                  author={item.author.username}
+                  date={item.updatedAt}
+                  tags={item.tagList}
+                  article={article}
+                  key={content.indexOf(item)}
+                />
+              );
+            })
+          )
+        ) : (
+          <h1 className="font-merriewether font-bold text-left text-7xl text-white">
+            Tidak ada Artikel
+          </h1>
         )}
       </div>
       {article ? (
-        <div className="add-article text-white">
+        <div className="add-article text-white mt-36">
           <form onSubmit={handleSwitch}>
             <Button>Tambah Artikel</Button>
           </form>
