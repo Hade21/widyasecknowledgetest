@@ -34,8 +34,6 @@ export const registerSlice = createSlice({
         },
         validateUser: (state, action) => {
             const res = USER_REGEX.test(action.payload);
-            console.log(res);
-            console.log(state.username);
             return {
                 ...state,
                 validUser: res,
@@ -55,8 +53,6 @@ export const registerSlice = createSlice({
         },
         validateEmail: (state, action) => {
             const res = EMAIL_REGEX.test(action.payload);
-            console.log(res);
-            console.log(state.validEmail);
             return {
                 ...state,
                 validEmail: res,
@@ -76,8 +72,6 @@ export const registerSlice = createSlice({
         },
         validatePass: (state, action) => {
             const res = PASS_REGEX.test(action.payload);
-            console.log(res);
-            console.log(state.pwd);
             return {
                 ...state,
                 validPwd: res,

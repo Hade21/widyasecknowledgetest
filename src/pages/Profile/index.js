@@ -37,7 +37,11 @@ const Profile = () => {
           dispatch(setProfilDetail(res.data.profile));
         }
       } catch (error) {
-        console.log(error);
+        if (error.response?.status === 403) {
+          alert("You have access to the data");
+        } else {
+          alert("No profile available");
+        }
       }
     }
     GetDetail();
@@ -72,11 +76,15 @@ const Profile = () => {
           className={`text-[200px] text-white ${profile ? "w-2/6" : "w-full"}`}
         >
           {profileDetail ? (
-            <img
-              src={profileDetail.image}
-              alt="profile"
-              className="w-[200px] h-[200px] rounded-full mb-4"
-            />
+            profileDetail.image ? (
+              <img
+                src={profileDetail.image}
+                alt="profile"
+                className="w-[200px] h-[200px] rounded-full mb-4"
+              />
+            ) : (
+              <FontAwesomeIcon icon={faUserCircle} />
+            )
           ) : (
             <FontAwesomeIcon icon={faUserCircle} />
           )}{" "}

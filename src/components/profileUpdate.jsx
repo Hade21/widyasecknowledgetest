@@ -8,7 +8,6 @@ import {
   setEmail,
   setImage,
   setPass,
-  setProfilDetail,
   setProfileUpdated,
   setUpdateProfile,
 } from "../app/features/pages/active";
@@ -17,7 +16,6 @@ import axios from "../api/axios";
 const ProfileUpdate = () => {
   const dispatch = useDispatch();
 
-  const username = useSelector((state) => state.active.username);
   const email = useSelector((state) => state.active.email);
   const bio = useSelector((state) => state.active.bio);
   const image = useSelector((state) => state.active.image);
@@ -44,14 +42,16 @@ const ProfileUpdate = () => {
     try {
       const res = await axios.put("/user", bodyConfig, header);
       if (res.status === 200) {
-        console.log(res);
         dispatch(setProfileUpdated());
         dispatch(setUpdateProfile());
         dispatch(resetProfile());
       }
-      console.log(res);
     } catch (error) {
-      console.log(error);
+      if (error.response?.status === 403) {
+        alert("You have no access to change data!");
+      } else {
+        alert("Gagal mengupdate data!");
+      }
     }
   };
 
@@ -93,9 +93,7 @@ const ProfileUpdate = () => {
         >
           Password
         </Input>
-        <Button disable={username || password || bio || image ? false : true}>
-          Simpan
-        </Button>
+        <Button disable={password ? false : true}>Simpan</Button>
       </form>
     </div>
   );

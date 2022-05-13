@@ -22,8 +22,8 @@ const ArticleDetail = () => {
       }
     }
     GetArticle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(content);
 
   const handleSwitch = () => {
     dispatch(setAddArticle());
@@ -44,7 +44,7 @@ const ArticleDetail = () => {
               article={article}
             />
           ) : (
-            content.map((item) => {
+            content.map((item, i) => {
               return (
                 <CardArticle
                   title={item.title}
@@ -54,7 +54,7 @@ const ArticleDetail = () => {
                   date={item.updatedAt}
                   tags={item.tagList}
                   article={article}
-                  key={content.indexOf(item)}
+                  key={i}
                 />
               );
             })

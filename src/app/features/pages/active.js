@@ -7,10 +7,9 @@ const initialState = {
     updateProfile: false,
     articles: false,
     addArticle: false,
-    username: "",
     bio: "",
     email: "",
-    image: "",
+    image: null,
     validImage: false,
     password: "",
     title: "",
@@ -76,12 +75,6 @@ export const activeSlices = createSlice({
             return {
                 ...state,
                 updateProfile: !state.updateProfile,
-            };
-        },
-        setUser: (state, action) => {
-            return {
-                ...state,
-                username: action.payload,
             };
         },
         setEmail: (state, action) => {
@@ -156,7 +149,6 @@ export const {
     setAddArticle,
     setProfileActive,
     setUpdateProfile,
-    setUser,
     setEmail,
     setBio,
     setImage,

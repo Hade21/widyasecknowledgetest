@@ -10,7 +10,7 @@ const ProfileDetail = ({ profile, onClick }) => {
         <h3>
           Bio :{" "}
           {profile
-            ? profile.bio === null
+            ? profile.bio === null || profile.bio === ""
               ? "Tidak ada bio"
               : profile.bio
             : "Tidak ada bio"}
