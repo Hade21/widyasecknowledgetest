@@ -73,7 +73,9 @@ const Profile = () => {
       ) : null}{" "}
       <div className={profile ? "flex items-center" : "content"}>
         <span
-          className={`text-[200px] text-white ${profile ? "w-2/6" : "w-full"}`}
+          className={`text-[200px] text-white ${
+            profile ? "w-2/6" : "w-full mx-auto"
+          }`}
         >
           {profileDetail ? (
             profileDetail.image ? (
