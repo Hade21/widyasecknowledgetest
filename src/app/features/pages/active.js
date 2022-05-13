@@ -10,7 +10,6 @@ const initialState = {
     bio: "",
     email: "",
     image: null,
-    validImage: false,
     password: "",
     title: "",
     description: "",
@@ -102,7 +101,6 @@ export const activeSlices = createSlice({
                 };
             }
         },
-        setvalidImage: (state, action) => {},
         setPass: (state, action) => {
             return {
                 ...state,

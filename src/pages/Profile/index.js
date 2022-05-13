@@ -80,7 +80,7 @@ const Profile = () => {
               <img
                 src={profileDetail.image}
                 alt="profile"
-                className="w-[200px] h-[200px] rounded-full mb-4"
+                className="w-[200px] h-[200px] rounded-full mb-4 mx-auto"
               />
             ) : (
               <FontAwesomeIcon icon={faUserCircle} />
